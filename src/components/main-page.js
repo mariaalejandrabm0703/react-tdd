@@ -1,13 +1,25 @@
-import React from "react";
+import { useEffect, useState } from "react";
 
-export const MainPage = () => (
-  <>
-    <h1>Simpsons quotes</h1>
+const getQuotes = () => fetch("/quotes");
 
-    <ul>
-      <li>Gah, stupid sexy Flanders!</li>
-      <li>Eat my shorts</li>
-      <li>Shut up, brain. I got friends now. I don't need you anymore</li>
-    </ul>
-  </>
-);
+export const MainPage = () => {
+  const [quotes, setQuotes] = useState([]);
+
+  useEffect(() => {
+    getQuotes()
+      .then((response) => response.json())
+      .then((data) => setQuotes(data));
+  });
+
+  return (
+    <>
+      <h1>Simpsons quotes</h1>
+
+      <ul>
+        {quotes.map(({ quote }) => (
+          <li key={quote}>{quote}</li>
+        ))}
+      </ul>
+    </>
+  );
+};
